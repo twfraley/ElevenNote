@@ -22,7 +22,7 @@ namespace ElevenNote.Services
             var entity =
                 new Note()
                 {
-                    OwnerID = _userId,
+                    OwnerId = _userId,
                     Title = model.Title,
                     Content = model.Content,
                     CreatedUtc = DateTimeOffset.Now
@@ -42,12 +42,12 @@ namespace ElevenNote.Services
                 var query =
                     ctx
                         .Notes
-                        .Where(e => e.OwnerID == _userId)
+                        .Where(e => e.OwnerId == _userId)
                         .Select(
                             e =>
                                 new NoteListItem
                                 {
-                                    NoteID = e.NoteID,
+                                    NoteId = e.NoteId,
                                     Title = e.Title,
                                     CreatedUtc = e.CreatedUtc
                                 }
@@ -56,5 +56,26 @@ namespace ElevenNote.Services
                 return query.ToArray();
             }
         }
+
+        public NoteDetail GetNoteById(int noteId)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Notes
+                        .Single(e => e.NoteId == noteId && e.OwnerId == _userId);
+                return
+                    new NoteDetail
+                    {
+                        NoteId = entity.NoteId,
+                        Title = entity.Title,
+                        Content = entity.Content,
+                        CreatedUtc = entity.CreatedUtc,
+                        ModifiedUtc = entity.ModifiedUtc
+                    };
+            }
+        }
+
     }
 }
