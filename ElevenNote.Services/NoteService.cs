@@ -37,6 +37,14 @@ namespace ElevenNote.Services
 
         public IEnumerable<NoteListItem> GetNotes()
         {
+            //new NoteListItem
+            //{
+            //    NoteId = e.NoteId,
+            //    Title = e.Title,
+            //    IsStarred = e.IsStarred,
+            //    CreatedUtc = e.CreatedUtc
+            //}
+
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
@@ -55,6 +63,7 @@ namespace ElevenNote.Services
 
                 return query.ToArray();
             }
+
         }
 
         public NoteDetail GetNoteById(int noteId)
